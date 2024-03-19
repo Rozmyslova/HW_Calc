@@ -1,12 +1,12 @@
 internal interface ICalc
 {
-    void Addition(double number);
+    void Addition(int number);
 
-    void Substraction(double number);
+    void Substraction(int number);
 
-    void Multiplication(double number);
+    void Multiplication(int number);
 
-    void Division(double number);
+    void Division(int number);
     event EventHandler<OperandChancedEventArgs> GetResult;
 
 }

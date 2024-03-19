@@ -1,4 +1,6 @@
 
+using System.Runtime.Serialization;
+
 internal class Calc : ICalc
 {
     public event EventHandler<OperandChancedEventArgs> GetResult;
@@ -27,23 +29,93 @@ internal class Calc : ICalc
             RaiseEvent();
         }
     }
-    public void Addition(double number)
+    public void Addition(int number)
     {
-        Result += number;
+        try
+        {
+            Result += number;
+        }
+        catch
+        {
+            throw new CalculateOperationCauseOverflowException("Превышение допустимого числа");
+        }
     }
 
-    public void Substraction(double number)
+    public void Substraction(int number)
     {
-        Result -= number;
+        try
+        {
+            Result -= number;
+        }
+        catch
+        {
+            throw new CalculateOperationCauseOverflowException("Превышение допустимого числа");
+        }
     }
-    public void Multiplication(double number)
+    public void Multiplication(int number)
     {
-        Result *= number;
+        try
+        {
+            Result *= number;
+        }
+        catch
+        {
+            throw new CalculateOperationCauseOverflowException("Превышение допустимого числа");
+        }
     }
 
-    public void Division(double number)
+    public void Division(int number)
     {
-        Result /= number;
+        try
+            {
+                if (number != 0)
+                    Result /= number;
+                else
+                    throw new CalculatorDivideByZeroException("На 0 делить нельзя!");
+            }
+            catch
+            {
+                throw new CalculateOperationCauseOverflowException("Превышение допустимого числа");
+            }
     }
 
+    [Serializable]
+    private class CalculateOperationCauseOverflowException : Exception
+    {
+        public CalculateOperationCauseOverflowException()
+        {
+        }
+
+        public CalculateOperationCauseOverflowException(string? message) : base(message)
+        {
+        }
+
+        public CalculateOperationCauseOverflowException(string? message, Exception? innerException) : base(message, innerException)
+        {
+        }
+
+        protected CalculateOperationCauseOverflowException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+    }
+}
+
+[Serializable]
+internal class CalculatorDivideByZeroException : Exception
+{
+    public CalculatorDivideByZeroException()
+    {
+    }
+
+    public CalculatorDivideByZeroException(string? message) : base(message)
+    {
+    }
+
+    public CalculatorDivideByZeroException(string? message, Exception? innerException) : base(message, innerException)
+    {
+    }
+
+    protected CalculatorDivideByZeroException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }
